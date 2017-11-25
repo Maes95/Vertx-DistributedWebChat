@@ -4,10 +4,10 @@ package com.globex.app;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.templ.ThymeleafTemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,8 +20,6 @@ import java.util.Map;
 
 public class ChatManager extends AbstractVerticle {
 
-    private final static int DEFAULT_PORT = 9000;
-
     private final static String DEFAULT_IP = "0.0.0.0";
 
     private final static String DUPLICATE_MSG = "{\"type\":\"system\",\"message\":\"Ya existe un usuario con ese nombre\"}";
@@ -29,23 +27,17 @@ public class ChatManager extends AbstractVerticle {
     //Add because the most easy way to obtain the deploymentID is when I deploy the verticle
     private final Map<String, String> users = new HashMap<>();
 
-    // Convenience method so you can run it in your IDE
-    public static void main(String[] args) {
-    	int _port = DEFAULT_PORT;
-    	if(args[0].length() > 0) {
-    		try {
-            	_port = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-               System.out.println("Failed trying to parse a non-numeric argument, " + args[0]);
-            }
-    	}else {
-    		System.out.println("No port declared, using default port: "+ DEFAULT_PORT);
-    	}
-
-        Vertx.vertx().deployVerticle(new ChatManager(_port));
-    }
-
     private int port;
+
+    public ChatManager() {
+      System.out.println(System.getenv("PORT"));
+      	try {
+      		this.port = Integer.parseInt(System.getenv("PORT"));
+      	}catch(NumberFormatException e) {
+      		System.err.println("Not a valid port at enviroment variable 'PORT'");
+      		this.port = 8080;
+      	}
+    }
 
     public ChatManager(int _port) {
     	this.port = _port;
@@ -53,21 +45,6 @@ public class ChatManager extends AbstractVerticle {
 
     @Override
     public void start() throws Exception {
-
-        final Router router = Router.router(vertx);
-        final ThymeleafTemplateEngine engine = ThymeleafTemplateEngine.create();
-
-        router.get("/").handler(ctx -> {
-          ctx.put("ip", DEFAULT_IP);
-          ctx.put("port", this.port);
-          engine.render(ctx, "webroot/index.html", res -> {
-            if (res.succeeded()) {
-              ctx.response().end(res.result());
-            } else {
-              ctx.fail(res.cause());
-            }
-          });
-        });
 
         vertx.createHttpServer().websocketHandler( (ServerWebSocket ws) -> {
             if (ws.path().equals("/chat")) {
@@ -88,6 +65,7 @@ public class ChatManager extends AbstractVerticle {
 
                     }else{
                         // Broadcast the message to all Users
+                    	System.out.println(message);
                         vertx.eventBus().publish(message.getString("chat"), message);
                     }
                 });
@@ -95,7 +73,9 @@ public class ChatManager extends AbstractVerticle {
                ws.reject();
             }
         })
-        .requestHandler(router::accept).listen(this.port);
+        .requestHandler((HttpServerRequest req) -> {
+            if (req.uri().equals("/")) req.response().sendFile("webroot/index.html"); // Serve the html
+        }).listen(this.port);
 
         // Listen for disconected users event
         vertx.eventBus().consumer("delete.user", data -> {

@@ -11,9 +11,6 @@
 
 <body>
 
-	<div id="ip" th:text="${context.get('ip')}">My IP</div>
-	<div id="port" th:text="${context.get('port')}">My Port</div>
-
 	<div class="chat_window">
 		<div class="top_menu">
 			<div class="buttons">
@@ -70,7 +67,7 @@
 				name = "user1";
 			}
 
-			const websocket = new WebSocket("ws://"+$('#ip').text()+":"+$('#port').text()+"/chat");
+			var websocket = new WebSocket("ws://0.0.0.0:"+location.port+"/chat");
 
 		 	websocket.onopen = function(ev) {
 				newSystemMessage('Connected to '+app);

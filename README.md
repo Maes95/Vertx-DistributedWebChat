@@ -5,6 +5,7 @@ Distributed web chat with Java and Vertx library
 
 * Java 8
 * Maven 3.3.9
+* Docker 17.09.0-ce
 
 ## SetUp
 
@@ -12,8 +13,17 @@ Distributed web chat with Java and Vertx library
 $ mvn install
 ```
 
-## Start application
+## How to start instances
 
+This application can works with multiples node, which run with docker
+
+Run first node
 ```sh
-$ mvn exec:java
+./fullBuildAndRun.sh 5000
 ```
+Run second node
+```sh
+./fullBuildAndRun.sh 8080
+```
+
+Open in your browser localhost:5000 and localhost:8080, then you can chat between nodes.
