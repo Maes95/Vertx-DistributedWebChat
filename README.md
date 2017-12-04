@@ -13,17 +13,21 @@ Distributed web chat with Java and Vertx library
 $ mvn install
 ```
 
+## How to start a single instance
+
+```sh
+./run.sh
+```
+
 ## How to start instances
 
-This application can works with multiples node, which run with docker
+This application can works with multiples nodes, which run with docker
 
 Run first node
 ```sh
-./fullBuildAndRun.sh 5000
+./fullBuildAndRun.sh 9000
 ```
 Run second node
 ```sh
-./fullBuildAndRun.sh 8080
+./fullBuildAndRun.sh 9001
 ```
-
-Open in your browser localhost:5000 and localhost:8080, then you can chat between nodes.

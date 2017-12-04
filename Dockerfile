@@ -14,6 +14,8 @@ ENV VERTICLE_FILE target/WebChatVertxMaven-0.1.0.jar
 
 # Set the location of the verticles
 ENV VERTICLE_HOME /usr/verticles
+# Set port to application
+ENV PORT 8000
 
 # Copy your verticle to the container
 COPY $VERTICLE_FILE $VERTICLE_HOME/
