@@ -4,6 +4,6 @@ if [ "$#" -eq  "0" ]
    echo "Use: ./buildAndRun PORT"
 else
   mvn install
-  docker build -t michel/vertx-web-chat .
-  docker run -t -i -p $1:$1 -e PORT=$1 michel/vertx-web-chat
+  docker build -t maes95/vertx-chat .
+  docker run -t -i -p $1:$1 -e PORT=$1 maes95/vertx-chat
 fi

@@ -67,7 +67,7 @@
 				name = "user1";
 			}
 
-			var websocket = new WebSocket("wss://"+location.hostname+":"+location.port+"/chat");
+			var websocket = new WebSocket("ws://"+location.hostname+":"+location.port+"/chat");
 
 		 	websocket.onopen = function(ev) {
 				newSystemMessage('Connected to '+app);
