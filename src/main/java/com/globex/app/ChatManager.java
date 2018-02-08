@@ -30,17 +30,7 @@ public class ChatManager extends AbstractVerticle {
     private int port;
 
     public ChatManager() {
-      System.out.println(System.getenv("PORT"));
-      	try {
-      		this.port = Integer.parseInt(System.getenv("PORT"));
-      	}catch(NumberFormatException e) {
-      		System.err.println("Not a valid port at enviroment variable 'PORT', using default: 8080");
-      		this.port = 9000;
-      	}
-    }
-
-    public ChatManager(int _port) {
-    	this.port = _port;
+      this.port = 8080;
     }
 
     @Override
