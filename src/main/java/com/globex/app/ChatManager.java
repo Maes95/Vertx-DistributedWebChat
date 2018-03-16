@@ -55,7 +55,6 @@ public class ChatManager extends AbstractVerticle {
 
                     }else{
                         // Broadcast the message to all Users
-                    	System.out.println(message);
                         vertx.eventBus().publish(message.getString("chat"), message);
                     }
                 });

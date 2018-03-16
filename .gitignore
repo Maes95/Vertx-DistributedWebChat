@@ -23,6 +23,13 @@ hs_err_pid*
 
 target/
 .vertx/
+logs/
 .settings
 .classpath
 .project
+*.pem
+src/main/resources/cluster.xml
+.idea
+haproxy/haproxy.cfg
+
+haproxy/haproxy.cfg
